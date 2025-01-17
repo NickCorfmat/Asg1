@@ -18,6 +18,11 @@ var FSHADER_SOURCE = `
         gl_FragColor = u_FragColor;
     }`;
 
+// Constants
+const POINT = 0;
+const TRIANGLE = 1;
+const CIRCLE = 2;
+
 // Global variables
 let canvas;
 let gl;
@@ -26,6 +31,7 @@ let u_FragColor;
 let u_Size;
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 let g_selectedSize = 5;
+let g_selectedType = POINT;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -82,6 +88,21 @@ function addActionsForHtmlUI() {
     renderAllShapes();
   };
 
+  document
+    .getElementById("pointButton")
+    .addEventListener("mouseup", function () {
+      g_selectedType = POINT;
+    });
+
+  document.getElementById("triButton").addEventListener("mouseup", function () {
+    g_selectedType = TRIANGLE;
+  });
+  document
+    .getElementById("circleButton")
+    .addEventListener("mouseup", function () {
+      g_selectedType = CIRCLE;
+    });
+
   // Slider Events
   document.getElementById("redSlider").addEventListener("mouseup", function () {
     g_selectedColor[0] = this.value / 100;
@@ -132,7 +153,15 @@ function handleClicks(ev) {
   let [x, y] = convertCoordinatesEventToGL(ev);
 
   // Create and store the new point
-  let point = new Point();
+  let point;
+  if (g_selectedType == POINT) {
+    point = new Point();
+  } else if (g_selectedType == TRIANGLE) {
+    point = new Triangle();
+  } else {
+    point = new Circle();
+  }
+
   point.position = [x, y];
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
