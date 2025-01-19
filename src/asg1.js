@@ -184,7 +184,7 @@ function convertCoordinatesEventToGL(ev) {
 
 function renderAllShapes() {
   // Check the time at the start of this function
-  var startTime = performance.now();
+  //var startTime = performance.now();
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -196,16 +196,16 @@ function renderAllShapes() {
   }
 
   // Check the time at the end of the function, and display on web page
-  var duration = performance.now() - startTime;
-  sendTextToHTML(
-    "numdot: " +
-      len +
-      " ms: " +
-      Math.floor(duration) +
-      " fps: " +
-      Math.floor(10000 / duration) / 10,
-    "numdot"
-  );
+  // var duration = performance.now() - startTime;
+  // sendTextToHTML(
+  //   "numdot: " +
+  //     len +
+  //     " ms: " +
+  //     Math.floor(duration) +
+  //     " fps: " +
+  //     Math.floor(10000 / duration) / 10,
+  //   "numdot"
+  // );
 }
 
 function sendTextToHTML(text, htmlID) {
