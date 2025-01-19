@@ -1,6 +1,8 @@
 // Nick Corfmat
 // ncorfmat@ucsc.edu
 
+import { triangles } from "./example";
+
 // Vertex shader program
 var VSHADER_SOURCE = `
     attribute vec4 a_Position;
@@ -88,6 +90,7 @@ function addActionsForHtmlUI() {
     renderAllShapes();
   };
 
+  // Shape Buttons
   document
     .getElementById("pointButton")
     .addEventListener("mouseup", function () {
@@ -101,6 +104,13 @@ function addActionsForHtmlUI() {
     .getElementById("circleButton")
     .addEventListener("mouseup", function () {
       g_selectedType = CIRCLE;
+    });
+
+  // Example Drawing
+  document
+    .getElementById("example-drawing")
+    .addEventListener("mouseup", function () {
+      generateExample();
     });
 
   // Slider Events
@@ -144,6 +154,8 @@ function main() {
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
+
+  generateExample();
 }
 
 var g_shapesList = [];
@@ -216,4 +228,18 @@ function sendTextToHTML(text, htmlID) {
   }
 
   htmlElm.innerHTML = text;
+}
+
+function generateExample() {
+  g_shapesList = [];
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  for (var i = 0; i < triangles.length; i++) {
+    // Set triangle color
+    var rgba = triangles[i].color;
+
+    gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+    
+    drawTriangle(triangles[i].vertices);
+  }
 }
