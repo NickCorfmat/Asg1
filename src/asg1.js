@@ -31,7 +31,9 @@ let u_FragColor;
 let u_Size;
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 let g_selectedSize = 5;
+let g_selectedSegments = 10;
 let g_selectedType = POINT;
+var g_shapesList = [];
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -45,7 +47,7 @@ function setupWebGL() {
   }
 }
 
-function connectShadersToGLSL() {
+function connectVariablesToGLSL() {
   // Initialize shaders (compile + install shaders)
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     console.log("Failed to initialize shaders.");
@@ -132,11 +134,18 @@ function addActionsForHtmlUI() {
     .addEventListener("mouseup", function () {
       g_selectedSize = this.value;
     });
+
+  // Circle segment sliders
+  document
+    .getElementById("segmentSlider")
+    .addEventListener("mouseup", function () {
+      g_selectedSegments = this.value;
+    });
 }
 
 function main() {
   setupWebGL();
-  connectShadersToGLSL();
+  connectVariablesToGLSL();
   addActionsForHtmlUI();
 
   // Register function (event handler) to be called on a mouse press
@@ -154,8 +163,6 @@ function main() {
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
-var g_shapesList = [];
-
 function handleClicks(ev) {
   // Extract the event click and return it in WebGL coordinates
   let [x, y] = convertCoordinatesEventToGL(ev);
@@ -168,6 +175,7 @@ function handleClicks(ev) {
     point = new Triangle();
   } else {
     point = new Circle();
+    point.segments = g_selectedSegments;
   }
 
   point.position = [x, y];
@@ -228,37 +236,82 @@ function sendTextToHTML(text, htmlID) {
 
 // Triangle vertices list for Millennium Falcon drawing
 const triangles = [
-  { vertices: [-0.3, 0.85, -0.6, 0.2, -0.15, 0.2], color: [0.75, 0.75, 0.75, 1.0] }, // left side
-  { vertices: [-0.15, 0.85, -0.15, 0.2, -0.3, 0.85], color: [0.7, 0.7, 0.7, 1.0] },
+  {
+    vertices: [-0.3, 0.85, -0.6, 0.2, -0.15, 0.2],
+    color: [0.75, 0.75, 0.75, 1.0],
+  }, // left side
+  {
+    vertices: [-0.15, 0.85, -0.15, 0.2, -0.3, 0.85],
+    color: [0.7, 0.7, 0.7, 1.0],
+  },
   { vertices: [-0.6, 0.2, 0, -0.2, -0.15, 0.2], color: [0.6, 0.6, 0.6, 1.0] },
   { vertices: [-0.72, 0, 0, -0.2, -0.6, 0.2], color: [0.75, 0.75, 0.75, 1.0] },
   { vertices: [-0.72, 0, 0, -0.2, -0.77, -0.2], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [-0.77, -0.4, 0, -0.2, -0.72, -0.6], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [-0.72, -0.6, 0, -0.2, -0.6, -0.77], color: [0.6, 0.6, 0.6, 1.0] },
-  { vertices: [-0.6, -0.77, 0, -0.2, -0.4, -0.89], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [-0.4, -0.89, 0, -0.2, -0.2, -0.95], color: [0.75, 0.75, 0.75, 1.0] },
-  { vertices: [-0.2, -0.95, 0, -0.2, -0.06, -0.96], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [-0.72, -0.2, 0, -0.2, -0.72, -0.389], color: [0.6, 0.6, 0.6, 1.0] },
+  {
+    vertices: [-0.77, -0.4, 0, -0.2, -0.72, -0.6],
+    color: [0.7, 0.7, 0.7, 1.0],
+  },
+  {
+    vertices: [-0.72, -0.6, 0, -0.2, -0.6, -0.77],
+    color: [0.6, 0.6, 0.6, 1.0],
+  },
+  {
+    vertices: [-0.6, -0.77, 0, -0.2, -0.4, -0.89],
+    color: [0.7, 0.7, 0.7, 1.0],
+  },
+  {
+    vertices: [-0.4, -0.89, 0, -0.2, -0.2, -0.95],
+    color: [0.75, 0.75, 0.75, 1.0],
+  },
+  {
+    vertices: [-0.2, -0.95, 0, -0.2, -0.06, -0.96],
+    color: [0.7, 0.7, 0.7, 1.0],
+  },
+  {
+    vertices: [-0.72, -0.2, 0, -0.2, -0.72, -0.389],
+    color: [0.6, 0.6, 0.6, 1.0],
+  },
   { vertices: [0.3, 0.85, 0.6, 0.2, 0.15, 0.2], color: [0.7, 0.7, 0.7, 1.0] }, // right side
-  { vertices: [0.15, 0.85, 0.15, 0.2, 0.3, 0.85], color: [0.75, 0.75, 0.75, 1.0] },
+  {
+    vertices: [0.15, 0.85, 0.15, 0.2, 0.3, 0.85],
+    color: [0.75, 0.75, 0.75, 1.0],
+  },
   { vertices: [0.6, 0.2, 0, -0.2, 0.15, 0.2], color: [0.6, 0.6, 0.6, 1.0] },
   { vertices: [0.72, 0, 0, -0.2, 0.6, 0.2], color: [0.7, 0.7, 0.7, 1.0] },
   { vertices: [0.72, 0, 0, -0.2, 0.77, -0.2], color: [0.75, 0.75, 0.75, 1.0] },
   { vertices: [0.77, -0.4, 0, -0.2, 0.72, -0.6], color: [0.7, 0.7, 0.7, 1.0] },
   { vertices: [0.72, -0.6, 0, -0.2, 0.6, -0.77], color: [0.6, 0.6, 0.6, 1.0] },
   { vertices: [0.6, -0.77, 0, -0.2, 0.4, -0.89], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [0.4, -0.89, 0, -0.2, 0.2, -0.95], color: [0.75, 0.75, 0.75, 1.0] },
+  {
+    vertices: [0.4, -0.89, 0, -0.2, 0.2, -0.95],
+    color: [0.75, 0.75, 0.75, 1.0],
+  },
   { vertices: [0.2, -0.95, 0, -0.2, 0.06, -0.96], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [0.72, -0.2, 0, -0.2, 0.72, -0.389], color: [0.6, 0.6, 0.6, 1.0] },
+  {
+    vertices: [0.72, -0.2, 0, -0.2, 0.72, -0.389],
+    color: [0.6, 0.6, 0.6, 1.0],
+  },
   { vertices: [-0.15, 0.2, 0, -0.2, 0.15, 0.2], color: [0.7, 0.7, 0.7, 1.0] }, // middle
-  { vertices: [-0.06, -0.96, 0, -0.2, 0.06, -0.96], color: [0.75, 0.75, 0.75, 1.0] },
+  {
+    vertices: [-0.06, -0.96, 0, -0.2, 0.06, -0.96],
+    color: [0.75, 0.75, 0.75, 1.0],
+  },
   { vertices: [0.6, 0.2, 0.72, 0, 0.85, 0.05], color: [0.6, 0.6, 0.6, 1.0] }, // cockpit
   { vertices: [0.6, 0.2, 0.85, 0.05, 0.87, 0.2], color: [0.7, 0.7, 0.7, 1.0] },
   { vertices: [0.6, 0.2, 0.6, 0.3, 0.87, 0.2], color: [0.6, 0.6, 0.6, 1.0] },
   { vertices: [0.87, 0.3, 0.6, 0.3, 0.87, 0.2], color: [0.7, 0.7, 0.7, 1.0] },
-  { vertices: [0.6, 0.3, 0.6675, 0.45, 0.735, 0.3], color: [0.25, 0.25, 0.25, 1.0] },
-  { vertices: [0.87, 0.3, 0.8025, 0.45, 0.735, 0.3], color: [0.25, 0.25, 0.25, 1.0] },
-  { vertices: [0.6675, 0.45, 0.8025, 0.45, 0.735, 0.3], color: [0.3, 0.3, 0.3, 1.0] }
+  {
+    vertices: [0.6, 0.3, 0.6675, 0.45, 0.735, 0.3],
+    color: [0.25, 0.25, 0.25, 1.0],
+  },
+  {
+    vertices: [0.87, 0.3, 0.8025, 0.45, 0.735, 0.3],
+    color: [0.25, 0.25, 0.25, 1.0],
+  },
+  {
+    vertices: [0.6675, 0.45, 0.8025, 0.45, 0.735, 0.3],
+    color: [0.3, 0.3, 0.3, 1.0],
+  },
 ];
 
 function generateExample() {
@@ -270,7 +323,7 @@ function generateExample() {
     var rgba = triangles[i].color;
 
     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-    
+
     drawTriangle(triangles[i].vertices);
   }
 }
