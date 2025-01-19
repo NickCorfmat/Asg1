@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
     <title>ASG 1</title>
 
     <script src="asg1.js"></script>
@@ -16,35 +17,46 @@
   </head>
 
   <body onload="main()">
+    <h1>Doodlepad!</h1>
     <canvas id="webgl" width="400" height="400">
       Please use a browser that supports "canvas"
     </canvas>
 
     <!-- <p id="numdot"> XXX </p> -->
-     <br>
-
-    <button type="button" id="green">Green</button>
-    <button type="button" id="red">Red</button>
-    
-    <button type="button" id="clearButton">Clear</button>
-    <br><br>
-
-    <button type="button" id="pointButton">Point</button>
-    <button type="button" id="triButton">Triangle</button>
-    <button type="button" id="circleButton">Circle</button>
-    <br><br>
-
-    Red <input type="range" min="0" max="100" value="100" class="slider" id="redSlider"><br>
-    Green <input type="range" min="0" max="100" value="0" class="slider" id="greenSlider"><br>
-    Blue <input type="range" min="0" max="100" value="0" class="slider" id="blueSlider"><br>
-
     <br>
-    Size <input type="range" min="5" max="40" value="0" class="slider" id="sizeSlider">
 
-    <br><br>
-    <button type="button" id="example-drawing">Generate Example!</button><br><br>
+    <div id="button-container">
+      <div id="color-buttons">
+        <h2>Colors</h2>
+        <button type="button" id="green">Green</button>
+        <button type="button" id="red">Red</button>
+      </div>
+  
+      <div id="shape-buttons">
+        <h2>Shapes</h2>
+        <button type="button" id="pointButton">Point</button>
+        <button type="button" id="triButton">Triangle</button>
+        <button type="button" id="circleButton">Circle</button>
+      </div>
 
-    <img src="../example.png" alt="Millennium Falcon drawing" width="300" height="300">
+      <div id="sliders">
+        <h2>Sliders</h2>
+        Red <input type="range" min="0" max="100" value="100" class="slider" id="redSlider"><br>
+        Green <input type="range" min="0" max="100" value="0" class="slider" id="greenSlider"><br>
+        Blue <input type="range" min="0" max="100" value="0" class="slider" id="blueSlider"><br>
+        Size <input type="range" min="5" max="40" value="0" class="slider" id="sizeSlider">
+      </div>
 
+      <div id="other-buttons">
+        <h2>Tools </h2>
+        <button type="button" id="clearButton">Clear</button>
+      </div>
+    </div>
+
+    <div id="example-container">
+      <img src="../example.png" id="example-picture" alt="Millennium Falcon drawing">
+
+      <button type="button" id="example-drawing">Generate Example!</button>
+    </div>
   </body>
 </html>
