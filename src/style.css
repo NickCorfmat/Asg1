@@ -25,6 +25,15 @@ h2 {
     font-weight: 600;
 }
 
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: rgb(14, 52, 95);
+}
+
 button {
     background-color: rgb(255, 142, 236);
     width: 100px;
@@ -46,6 +55,7 @@ button:hover {
     width: 400px;
     height: 400px;
     box-shadow: 0px 0px 24px rgb(142, 232, 255);
+    cursor: url("../pencil.png") 0 50, auto; /* Pencil asset from http://www.clker.com/clipart-15848.html */
 }
 
 #button-container {
