@@ -89,6 +89,9 @@ function addActionsForHtmlUI() {
     g_shapesList = [];
     renderAllShapes();
   };
+  document.getElementById("undoButton").onclick = function () {
+    undoStroke();
+  };
 
   // Shape Buttons
   document
@@ -325,5 +328,12 @@ function generateExample() {
     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
     drawTriangle(triangles[i].vertices);
+  }
+}
+
+function undoStroke() {
+  if (g_shapesList.length > 0) {
+    g_shapesList.pop();
+    renderAllShapes();
   }
 }
